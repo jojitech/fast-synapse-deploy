@@ -33,7 +33,7 @@ steps:
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-    - uses: ShawnMcGough/fast-synapse-deploy@v1
+    - uses: jojitech/fast-synapse-deploy@v1
     with:
         template: 'TemplateForWorkspace.json'
         parameters: 'TemplateParametersForWorkspace.json'

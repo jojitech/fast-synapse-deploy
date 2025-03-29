@@ -1,6 +1,10 @@
 name: Fast Synapse Deploy
 description: Deploy Azure Synapse artifacts quickly!
 author: Shawn McGough
+branding:
+  icon: 'chevrons-right'
+  color: 'blue'
+
 inputs:
   template:
     description: 'Path to the Synapse template file (relative to repository root)'
