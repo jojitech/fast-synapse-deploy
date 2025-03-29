@@ -1,0 +1,55 @@
+name: Fast Synapse Deploy
+description: Deploy Azure Synapse artifacts quickly!
+author: Shawn McGough
+inputs:
+  template:
+    description: 'Path to the Synapse template file (relative to repository root)'
+    required: true
+  parameters:
+    description: 'Path to the Synapse parameters file (relative to repository root)'
+    required: true
+  subscription-id:
+    description: 'Azure Subscription ID'
+    required: true
+  resource-group:
+    description: 'Azure Resource Group name'
+    required: true
+  workspace-name:
+    description: 'Azure Synapse Workspace name'
+    required: true
+  delete-artifacts:
+    description: 'Delete artifacts after deployment (true/false)'
+    required: false
+    default: 'true'
+  override-parameters:
+    description: 'Override parameters (-key1 value1 -key2 value2)'
+    required: false
+runs:
+  using: 'composite'
+  steps:
+    - name: Deploy from Linux
+      if: runner.os == 'Linux'
+      shell: bash
+      run: |
+        chmod +x ${{ github.action_path }}/src/SynapseDeploy
+        ${{ github.action_path }}/src/SynapseDeploy \
+          "${{ github.workspace }}/${{ inputs.template }}" \
+          "${{ github.workspace }}/${{ inputs.parameters }}" \
+          "${{ inputs.subscription-id }}" \
+          "${{ inputs.resource-group }}" \
+          "${{ inputs.workspace-name }}" \
+          ${{ inputs.delete-artifacts == 'true' && 'true' || 'false' }} \
+          ${{ inputs.override-parameters }}
+    - name: Deploy from Windows
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        $deleteArtifacts = if ("${{ inputs.delete-artifacts }}" -eq "true") { "true" } else { "false" }
+        & "${{ github.action_path }}/src/SynapseDeploy.exe" `
+          "${{ github.workspace }}/${{ inputs.template }}" `
+          "${{ github.workspace }}/${{ inputs.parameters }}" `
+          "${{ inputs.subscription-id }}" `
+          "${{ inputs.resource-group }}" `
+          "${{ inputs.workspace-name }}" `
+          $deleteArtifacts `
+          ${{ inputs.override-parameters }}
