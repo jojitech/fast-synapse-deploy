@@ -60,19 +60,11 @@ This action can work in tandem with the Microsoft `validate` action, which is re
 This action seeks to deploy artifacts as quickly as possible. To that end, it will make multiple concurrent requests to the Synapse API. Depending on usage patterns (multiple and/or frequent deployments, for example), the Synapse API might respond with `TooManyRequests [429]`. The `SYNAPSE_API_LIMIT` environment variable is used to limit the number of concurrent requests to try and mitigate this issue.  Unfortunately, the Synapse API does not implement a `retry-after` header, so the entire deploy must be terminated.
 
 ## Star Me
-Please consider [leaving a star]() if your workspace was deployed faster!
+Please consider [leaving a star](https://github.com/marketplace/actions/fast-synapse-deploy) if your workspace was deployed faster!
 Also [leave a comment](https://github.com/ShawnMcGough/fast-synapse-deploy/discussions/categories/general). I love to hear how it is helping with deployments!
 
 
 ## Release Notes
 
- - 1.0.12
+ - 1.0
    - Initial public release
-
-
-
-
-
-
-
-

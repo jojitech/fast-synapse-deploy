@@ -1,5 +1,5 @@
 name: Fast Synapse Deploy
-description: Deploy Azure Synapse artifacts quickly!
+description: Deploy Azure Synapse artifacts, ~fast~!
 author: Shawn McGough
 branding:
   icon: 'chevrons-right'
