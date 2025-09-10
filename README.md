@@ -68,3 +68,13 @@ Also [leave a comment](https://github.com/ShawnMcGough/fast-synapse-deploy/discu
 
  - v1.0
    - Initial public release
+
+## Enterprise and Support Options
+This extension is free for personal and commercial use under the terms in LICENSE. For enterprise features, including:
+
+- Source code access (under NDA)
+- Security audits and certifications
+- Custom modifications or integrations
+- Ongoing support SLAs (e.g., priority bug fixes, updates)
+
+Contact Jojitech LLC at info@jojitech.com
