@@ -66,6 +66,9 @@ Also [leave a comment](https://github.com/ShawnMcGough/fast-synapse-deploy/discu
 
 ## Release Notes
 
+ - v1.0.1
+   - bump packages
+
  - v1.0
    - Initial public release
 
