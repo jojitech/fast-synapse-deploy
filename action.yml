@@ -43,7 +43,7 @@ runs:
           "${{ inputs.resource-group }}" \
           "${{ inputs.workspace-name }}" \
           ${{ inputs.delete-artifacts == 'true' && 'true' || 'false' }} \
-          ${{ inputs.override-parameters }}
+          "${{ inputs.override-parameters }}"
     - name: Deploy from Windows
       if: runner.os == 'Windows'
       shell: pwsh
@@ -56,4 +56,4 @@ runs:
           "${{ inputs.resource-group }}" `
           "${{ inputs.workspace-name }}" `
           $deleteArtifacts `
-          ${{ inputs.override-parameters }}
+          "${{ inputs.override-parameters }}"
