@@ -34,6 +34,8 @@ runs:
     - name: Deploy from Linux
       if: runner.os == 'Linux'
       shell: bash
+      env:
+        OVERRIDE_PARAMS: ${{ inputs.override-parameters }}
       run: |
         chmod +x ${{ github.action_path }}/src/SynapseDeploy
         ${{ github.action_path }}/src/SynapseDeploy \
@@ -43,10 +45,12 @@ runs:
           "${{ inputs.resource-group }}" \
           "${{ inputs.workspace-name }}" \
           ${{ inputs.delete-artifacts == 'true' && 'true' || 'false' }} \
-          "${{ inputs.override-parameters }}"
+          "$OVERRIDE_PARAMS"
     - name: Deploy from Windows
       if: runner.os == 'Windows'
       shell: pwsh
+      env:
+        OVERRIDE_PARAMS: ${{ inputs.override-parameters }}
       run: |
         $deleteArtifacts = if ("${{ inputs.delete-artifacts }}" -eq "true") { "true" } else { "false" }
         & "${{ github.action_path }}/src/SynapseDeploy.exe" `
@@ -56,4 +60,4 @@ runs:
           "${{ inputs.resource-group }}" `
           "${{ inputs.workspace-name }}" `
           $deleteArtifacts `
-          "${{ inputs.override-parameters }}"
+          $env:OVERRIDE_PARAMS
