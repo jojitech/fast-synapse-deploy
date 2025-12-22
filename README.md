@@ -89,8 +89,8 @@ When using `auto` speed (default), RPM limits are calculated based on artifact c
 |-----------|-----------|
 | < 500 | Unlimited |
 | 500 - 1000 | ~1100 |
-| 1000 - 2000 | ~900 |
-| 2000+ | ~700 |
+| 1000 - 2000 | ~800 |
+| 2000+ | ~500 |
 
 > **Tip:** The tool automatically reduces RPM if it encounters 429 errors, so starting with defaults and letting it adapt is usually the best approach.
 
