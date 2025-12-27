@@ -62,7 +62,7 @@ This action can work in tandem with the Microsoft `validate` action, which is re
 
 > ⚠️ **Requires task version 2 or later.** Earlier versions do not support configurable throttling.
 
-### TL;DR: Leave the Defaults
+### TL;DR: Leave the Defaults...
 
 **For most users, no configuration is needed.** FastSynapseDeploy automatically:
 - Adjusts request rates based on your deployment size
@@ -70,6 +70,11 @@ This action can work in tandem with the Microsoft `validate` action, which is re
 - Recovers gracefully from 429 errors
 
 Just run the task and let it handle throttling for you.
+
+### ...Unless you have the Need for Speed
+
+**Many deployments can be deployed significantly faster** by setting `SYNAPSE_DEPLOYMENT_SPEED=yolo`. However, there is a greater chance of hitting rate limits (429 errors). These limits are not documented and appear to vary based on time of day and region.
+
 
 ### When to Change Settings
 
