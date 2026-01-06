@@ -168,9 +168,7 @@ Also [leave a comment](https://github.com/ShawnMcGough/fast-synapse-deploy/discu
    - major improvements to throttling / back-off
    - additional env variables to enable more control
    - more conservative defaults to prioritize success over raw speed
-
- - v1.0.1
-   - bump packages
+   - less logging by default, verbose enabled by env var
 
  - v1.0
    - Initial public release
@@ -182,5 +180,6 @@ This extension is free for personal and commercial use under the terms in LICENS
 - Security audits and certifications
 - Custom modifications or integrations
 - Ongoing support SLAs (e.g., priority bug fixes, updates)
+
 
 Contact Jojitech LLC at info@jojitech.com
