@@ -28,6 +28,18 @@ inputs:
   override-parameters:
     description: 'Override parameters (-key1 value1 -key2 value2)'
     required: false
+  hash-check:
+    description: 'Enable hash-based change detection (true/false)'
+    required: false
+    default: 'true'
+  selective:
+    description: 'Only deploy artifacts that differ from the current state (true/false)'
+    required: false
+    default: 'true'
+  dry-run:
+    description: 'Preview changes without actually deploying (true/false)'
+    required: false
+    default: 'false'
 runs:
   using: 'composite'
   steps:
@@ -39,6 +51,9 @@ runs:
       run: |
         chmod +x ${{ github.action_path }}/src/SynapseDeploy
         ${{ github.action_path }}/src/SynapseDeploy \
+          ${{ inputs.selective == 'true' && '--selective' || '' }} \
+          ${{ inputs.hash-check == 'true' && '--hash-check' || '' }} \
+          ${{ inputs.dry-run == 'true' && '--dry-run' || '' }} \
           "${{ github.workspace }}/${{ inputs.template }}" \
           "${{ github.workspace }}/${{ inputs.parameters }}" \
           "${{ inputs.subscription-id }}" \
@@ -53,7 +68,13 @@ runs:
         OVERRIDE_PARAMS: ${{ inputs.override-parameters }}
       run: |
         $deleteArtifacts = if ("${{ inputs.delete-artifacts }}" -eq "true") { "true" } else { "false" }
+        $selectiveFlag = if ("${{ inputs.selective }}" -eq "true") { "--selective" } else { "" }
+        $hashCheckFlag = if ("${{ inputs.hash-check }}" -eq "true") { "--hash-check" } else { "" }
+        $dryRunFlag = if ("${{ inputs.dry-run }}" -eq "true") { "--dry-run" } else { "" }
         & "${{ github.action_path }}/src/SynapseDeploy.exe" `
+          $selectiveFlag `
+          $hashCheckFlag `
+          $dryRunFlag `
           "${{ github.workspace }}/${{ inputs.template }}" `
           "${{ github.workspace }}/${{ inputs.parameters }}" `
           "${{ inputs.subscription-id }}" `
