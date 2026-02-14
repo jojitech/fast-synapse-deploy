@@ -25,20 +25,26 @@ Fast Synapse Deploy has significant speed improvements over the Microsoft Synaps
 ### 2,507 Artifacts
 | Deployment Method | Time to Deploy | Speedup |
 |:------------------|:-------------------------------:|:-------:|
-| Microsoft Synapse deployment task | 01h 17m 32s | **comically slow** 🐌 |
-| Fast Synapse Deploy: Full Deployment | 08m 41s | **9x faster** 🔥 |
-| Fast Synapse Deploy: Selective Deployment | 01m 42s | **46x faster** 🚀 |
-| Fast Synapse Deploy: Zero Deployment*  | 00m 02s | **2326x faster** 🤯 |
+| Microsoft Synapse deployment task | 1h 17m 32s | **comically slow** 🐌 |
+| Fast Synapse Deploy: Full Deployment | 8m 41s | **9x faster** 🔥 |
+| Fast Synapse Deploy: Selective Deployment | 1m 42s | **46x faster** 🚀 |
+| Fast Synapse Deploy: Zero Deployment*  | 2s | **2326x faster** 🤯 |
 
 ### 689 Artifacts
 | Deployment Method | Time to Deploy | Speedup |
 |:------------------|:-------------------------------:|:-------:|
 | Microsoft Synapse deployment task | 22m 28s | **so slow** 🐢 |
-| Fast Synapse Deploy: Full Deployment | 01m 17s | **17x faster** 🔥 |
-| Fast Synapse Deploy: Selective Deployment | 00m 50s | **27x faster** 🚀 |
-| Fast Synapse Deploy: Zero Deployment*  | 00m 02s | **674x faster** 🤯 |
+| Fast Synapse Deploy: Full Deployment | 1m 17s | **17x faster** 🔥 |
+| Fast Synapse Deploy: Selective Deployment | 50s | **27x faster** 🚀 |
+| Fast Synapse Deploy: Zero Deployment*  | 2s | **674x faster** 🤯 |
 
-
+### 29 Artifacts
+| Deployment Method | Time to Deploy | Speedup |
+|:------------------|:-------------------------------:|:-------:|
+| Microsoft Synapse deployment task | 1m 50s | **slow** 🐢 |
+| Fast Synapse Deploy: Full Deployment | 46s | **2x faster** 🔥 |
+| Fast Synapse Deploy: Selective Deployment | 28s | **4x faster** 🚀 |
+| Fast Synapse Deploy: Zero Deployment*  | 2s | **55x faster** 🤯 |
 
 > \* To be clear, Zero Deployment detects no changes and skips the deployment entirely.
 
