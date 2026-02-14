@@ -20,16 +20,16 @@ with a focus on speed, reliability, and modern features.
 
 ## Comparison to *Microsoft Synapse deployment task*
 
-In internal testing, Fast Synapse Deploy has shown significant speed improvements over the Microsoft Synapse deployment task, especially for larger deployments.
+Fast Synapse Deploy has significant speed improvements over the Microsoft Synapse deployment task, especially for larger deployments.
 
 | Deployment Method | Time to Deploy<br>689 Artifacts | Speedup |
 |:------------------|:-------------------------------:|:-------:|
 | Microsoft Synapse deployment task | 22m28s | — |
 | Fast Synapse Deploy: Full Deployment | 01m17s | **17x faster** 🔥 |
 | Fast Synapse Deploy: Selective Deployment | 00m50s | **27x faster** 🚀 |
-| Fast Synapse Deploy: Zero Deployment ^1^ | 00m02s | **674x faster** 🤯 |
+| Fast Synapse Deploy: Zero Deployment*  | 00m02s | **674x faster** 🤯 |
 
-> [1] To be clear, Zero Deployment detects no changes and skips the deployment entirely.
+> \* To be clear, Zero Deployment detects no changes and skips the deployment entirely.
 
 ## Zero Deployment / Hash Check (v3+)
 > ⚠️ **Requires task version 3 or later.**
@@ -161,12 +161,9 @@ Also [leave a comment](https://github.com/ShawnMcGough/fast-synapse-deploy/discu
 ## Release Notes
 
 ### v3
-- **Selective Deployment**: Deploy only NEW/MODIFIED artifacts, skip unchanged
-- **Zero Deployment**: Skip entire deployment when template hash matches (via `SYNAPSE_ENABLE_HASH_CHECK`)
-- **Dry-Run Mode**: Preview changes without deploying (`--selective --dry-run`)
-- Dependency cascade optimization: skip content fetch for artifacts whose parent is NEW
-- Improved analysis phase with higher RPM for GET requests
-- Type-specific JSON normalization for accurate change detection
+- **Selective Deployment**: Deploy only new and modified artifacts, skip unchanged
+- **Zero Deployment**: Skip entire deployment when template hash matches 
+- **Dry-Run Mode**: Preview changes without deploying 
 
 ### v2
 - Major improvements to throttling / back-off
