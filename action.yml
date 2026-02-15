@@ -89,6 +89,7 @@ runs:
                 "actionVersion": "${ACTION_REF}",
                 "repoHash": "${REPO_HASH}",
                 "event": "${EVENT_TYPE}",
+                "deploySpeed": "${SYNAPSE_DEPLOYMENT_SPEED:-auto}",
                 "selective": "${{ inputs.selective }}",
                 "hashCheck": "${{ inputs.hash-check }}"
               }
@@ -152,6 +153,7 @@ runs:
                   actionVersion = $actionRef
                   repoHash      = $repoHash
                   event         = $eventType
+                  deploySpeed   = if ($env:SYNAPSE_DEPLOYMENT_SPEED) { $env:SYNAPSE_DEPLOYMENT_SPEED } else { "auto" }
                   selective     = "${{ inputs.selective }}"
                   hashCheck     = "${{ inputs.hash-check }}"
                 }

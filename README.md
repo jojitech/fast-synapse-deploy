@@ -183,6 +183,7 @@ This action collects **anonymous, minimal usage telemetry** via Azure Applicatio
 | Action version | `v3` | Track version adoption |
 | SHA-256 hash of `github.repository` | `a1b2c3d4e5...` | Count unique repos (cannot be reversed to identify you) |
 | Event type | `deploy` / `dry-run` | Understand feature usage |
+| Deploy speed | `auto` / `fast` / `safe` / `yolo` | Understand throttle preferences |
 | Feature flags | `selective: true` | Understand feature usage |
 
 ### What is **never** collected
