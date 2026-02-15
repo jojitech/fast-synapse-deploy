@@ -171,6 +171,46 @@ Requires [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/overview) instal
  - Deploying *directly* from branch other than `publish`. 
    - However, can be combined with `validate` task (see note below) to achieve same result.
 
+## Telemetry
+
+This action collects **anonymous, minimal usage telemetry** via Azure Application Insights to help the maintainer understand adoption and prioritize improvements. **No sensitive or identifying information is ever collected.**
+
+### What is collected
+
+| Field | Example | Purpose |
+|-------|---------|--------|
+| Runner OS | `Linux` / `Windows` | Know which platforms to prioritize |
+| Action version | `v3` | Track version adoption |
+| SHA-256 hash of `github.repository` | `a1b2c3d4e5...` | Count unique repos (cannot be reversed to identify you) |
+| Event type | `deploy` / `dry-run` | Understand feature usage |
+| Feature flags | `selective: true` | Understand feature usage |
+
+### What is **never** collected
+
+- Repository name, organization, or usernames
+- Azure subscription, resource group, or workspace names
+- Template contents, parameters, or file paths
+- Tokens, credentials, or IP addresses
+
+### Opting out
+
+Set the `disable-telemetry` input to `true`:
+
+```yaml
+- uses: ShawnMcGough/fast-synapse-deploy@v3
+  with:
+    disable-telemetry: 'true'
+    # ... other inputs
+```
+
+The telemetry step is fully visible in [action.yml](action.yml) — you can inspect exactly what is sent.
+
+### How it works
+
+The telemetry configuration (App Insights connection string and enabled flag) is stored in [.telemetry.json](.telemetry.json) on the `main` branch. At runtime, the telemetry step fetches this config file so that the connection string can be rotated or telemetry can be disabled globally without publishing a new action version. If the config file is unreachable or `enabled` is `false`, telemetry is silently skipped.
+
+---
+
 ## Star Me
 Please consider [leaving a star](https://github.com/marketplace/actions/fast-synapse-deploy) if your workspace was deployed faster!
 Also [leave a comment](https://github.com/ShawnMcGough/fast-synapse-deploy/discussions/categories/general). I love to hear how it is helping with deployments!

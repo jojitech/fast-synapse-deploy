@@ -1,0 +1,4 @@
+{
+  "connectionString": "InstrumentationKey=9dff8219-acfc-4a23-bd70-fb969eaeaedf;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/;ApplicationId=27e125c0-635e-425c-9cc1-2d2768ef6d00",
+  "enabled": true
+}

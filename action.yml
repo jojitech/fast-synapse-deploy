@@ -40,9 +40,132 @@ inputs:
     description: 'Preview changes without actually deploying (true/false)'
     required: false
     default: 'false'
+  disable-telemetry:
+    description: 'Disable anonymous usage telemetry (true/false). See README for details on what is collected.'
+    required: false
+    default: 'false'
 runs:
   using: 'composite'
   steps:
+    - name: Anonymous Telemetry (Linux)
+      if: runner.os == 'Linux' && inputs.disable-telemetry != 'true'
+      shell: bash
+      run: |
+        # Transparent telemetry — see README for details.
+        # Only anonymous, non-sensitive metadata is collected.
+        # Set disable-telemetry: 'true' to opt out.
+
+        # Fetch telemetry config from main branch (allows key rotation without new release)
+        CONFIG_URL="https://raw.githubusercontent.com/jojitech/fast-synapse-deploy/main/.telemetry.json"
+        CONFIG=$(curl -s -m 5 "$CONFIG_URL" 2>/dev/null) || exit 0
+
+        # Check if telemetry is enabled in config
+        ENABLED=$(echo "$CONFIG" | grep -o '"enabled"\s*:\s*[a-z]*' | grep -o '[a-z]*$')
+        if [ "$ENABLED" != "true" ]; then exit 0; fi
+
+        # Extract connection string and parse ingestion endpoint + ikey
+        CONN_STR=$(echo "$CONFIG" | grep -o '"connectionString"\s*:\s*"[^"]*"' | sed 's/"connectionString"\s*:\s*"//;s/"$//')
+        if [ -z "$CONN_STR" ]; then exit 0; fi
+
+        INGESTION_EP=$(echo "$CONN_STR" | grep -oP 'IngestionEndpoint=\K[^;]+')
+        IKEY=$(echo "$CONN_STR" | grep -oP 'InstrumentationKey=\K[^;]+')
+        if [ -z "$INGESTION_EP" ] || [ -z "$IKEY" ]; then exit 0; fi
+
+        REPO_HASH=$(echo -n "${{ github.repository }}" | sha256sum | cut -d' ' -f1)
+        ACTION_REF="${{ github.action_ref }}"
+        EVENT_TYPE="${{ inputs.dry-run == 'true' && 'dry-run' || 'deploy' }}"
+        TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+        PAYLOAD=$(cat <<EOF
+        {
+          "name": "AppEvents",
+          "time": "${TIMESTAMP}",
+          "iKey": "${IKEY}",
+          "data": {
+            "baseType": "EventData",
+            "baseData": {
+              "name": "ActionRun",
+              "properties": {
+                "os": "Linux",
+                "actionVersion": "${ACTION_REF}",
+                "repoHash": "${REPO_HASH}",
+                "event": "${EVENT_TYPE}",
+                "selective": "${{ inputs.selective }}",
+                "hashCheck": "${{ inputs.hash-check }}"
+              }
+            }
+          }
+        }
+        EOF
+        )
+        # Fire-and-forget: never block or fail the workflow
+        curl -s -o /dev/null -m 5 \
+          -X POST "${INGESTION_EP}v2/track" \
+          -H "Content-Type: application/json" \
+          -d "$PAYLOAD" &>/dev/null || true
+      continue-on-error: true
+
+    - name: Anonymous Telemetry (Windows)
+      if: runner.os == 'Windows' && inputs.disable-telemetry != 'true'
+      shell: pwsh
+      run: |
+        # Transparent telemetry — see README for details.
+        # Only anonymous, non-sensitive metadata is collected.
+        # Set disable-telemetry: 'true' to opt out.
+        try {
+          # Fetch telemetry config from main branch (allows key rotation without new release)
+          $configUrl = "https://raw.githubusercontent.com/ShawnMcGough/fast-synapse-deploy/main/.telemetry.json"
+          $config = Invoke-RestMethod -Uri $configUrl -TimeoutSec 5 -UseBasicParsing
+
+          # Check if telemetry is enabled in config
+          if (-not $config.enabled) { return }
+
+          # Parse connection string for ingestion endpoint and instrumentation key
+          $connStr = $config.connectionString
+          if (-not $connStr) { return }
+
+          $parts = @{}
+          $connStr.Split(";") | ForEach-Object {
+            $kv = $_.Split("=", 2)
+            if ($kv.Length -eq 2) { $parts[$kv[0]] = $kv[1] }
+          }
+          $ingestionEp = $parts["IngestionEndpoint"]
+          $iKey = $parts["InstrumentationKey"]
+          if (-not $ingestionEp -or -not $iKey) { return }
+
+          $repoHash = [System.BitConverter]::ToString(
+            [System.Security.Cryptography.SHA256]::Create().ComputeHash(
+              [System.Text.Encoding]::UTF8.GetBytes("${{ github.repository }}")
+            )
+          ).Replace("-", "").ToLower()
+          $actionRef = "${{ github.action_ref }}"
+          $eventType = if ("${{ inputs.dry-run }}" -eq "true") { "dry-run" } else { "deploy" }
+          $payload = @{
+            name = "AppEvents"
+            time = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+            iKey = $iKey
+            data = @{
+              baseType = "EventData"
+              baseData = @{
+                name = "ActionRun"
+                properties = @{
+                  os            = "Windows"
+                  actionVersion = $actionRef
+                  repoHash      = $repoHash
+                  event         = $eventType
+                  selective     = "${{ inputs.selective }}"
+                  hashCheck     = "${{ inputs.hash-check }}"
+                }
+              }
+            }
+          } | ConvertTo-Json -Depth 5 -Compress
+          Invoke-WebRequest -Uri "${ingestionEp}v2/track" `
+            -Method POST -ContentType "application/json" -Body $payload `
+            -TimeoutSec 5 -UseBasicParsing | Out-Null
+        } catch {
+          # Fire-and-forget: never block or fail the workflow
+        }
+      continue-on-error: true
+
     - name: Deploy from Linux
       if: runner.os == 'Linux'
       shell: bash
