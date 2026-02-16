@@ -59,7 +59,8 @@ PAYLOAD=$(cat <<EOF
         "event": "${EVENT_TYPE}",
         "deploySpeed": "${SYNAPSE_DEPLOYMENT_SPEED:-auto}",
         "selective": "${TELEMETRY_SELECTIVE}",
-        "hashCheck": "${TELEMETRY_HASH_CHECK}"
+        "hashCheck": "${TELEMETRY_HASH_CHECK}",
+        "platform": "GitHubActions"
       }
     }
   }

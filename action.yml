@@ -1,6 +1,6 @@
 name: Fast Synapse Deploy
-description: Deploy Azure Synapse artifacts, ~fast~!
-author: Shawn McGough (jojitech)
+description: The fastest way to deploy Azure Synapse artifacts. With OIDC auth and proxy support.
+author: jojitech
 branding:
   icon: 'chevrons-right'
   color: 'blue'
